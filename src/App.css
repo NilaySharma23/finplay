@@ -1,38 +1,607 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #0F1419 0%, #1A202C 100%);
+  min-height: 100vh;
+  color: #F7FAFC;
+  overflow-x: hidden;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1A202C;
+}
+::-webkit-scrollbar-thumb {
+  background: #4A5568;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #718096;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Gamification Elements */
+.streak-counter {
+  background: linear-gradient(135deg, #FF4500 0%, #FF6B35 100%);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(255, 69, 0, 0.3);
+  animation: pulse 2s infinite;
+}
+.badge-showcase {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
+.badge {
+  background: linear-gradient(135deg, #48BB78 0%, #38A169 100%);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+  transition: transform 0.2s ease-in-out;
+}
+.badge:hover {
+  transform: scale(1.05);
+}
+.badge.gold {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+.badge.silver {
+  background: linear-gradient(135deg, #C0C0C0 0%, #A0A0A0 100%);
+  box-shadow: 0 2px 8px rgba(192, 192, 192, 0.4);
+}
+.badge.bronze {
+  background: linear-gradient(135deg, #CD7F32 0%, #B8691A 100%);
+  box-shadow: 0 2px 8px rgba(205, 127, 50, 0.4);
+}
+
+/* Progress Bars */
+.progress-container {
+  background: #2D3748;
+  border-radius: 8px;
+  height: 12px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #20BEFF 0%, #48BB78 100%);
+  border-radius: 8px;
+  transition: width 0.8s ease-in-out;
+  position: relative;
+}
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  animation: shimmer 2s infinite;
+}
+
+/* Module Cards */
+.module-card {
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+  border: 1px solid #4A5568;
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.module-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(32, 190, 255, 0.1) 0%, rgba(72, 187, 120, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.module-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  border-color: #20BEFF;
+}
+.module-card:hover::before {
+  opacity: 1;
+}
+.module-icon {
+  color: #20BEFF;
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+/* Trading Interface */
+.trading-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  min-height: 70vh;
+}
+.portfolio-table {
+  background: #1A202C;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #2D3748;
+}
+.portfolio-row {
+  transition: background-color 0.2s ease-in-out;
+}
+.portfolio-row:hover {
+  background-color: #2D3748;
+}
+
+/* Leaderboard Styling */
+.leaderboard-rank-1 {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  position: relative;
+}
+.leaderboard-rank-1::before {
+  content: '👑';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.leaderboard-rank-2 {
+  background: linear-gradient(135deg, rgba(192, 192, 192, 0.15) 0%, rgba(192, 192, 192, 0.05) 100%);
+  border: 1px solid rgba(192, 192, 192, 0.3);
+}
+.leaderboard-rank-3 {
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.15) 0%, rgba(205, 127, 50, 0.05) 100%);
+  border: 1px solid rgba(205, 127, 50, 0.3);
+}
+
+/* Chart Styling */
+.chart-container {
+  background: #1A202C;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 16px 0; /* Increased margin to avoid collision with main card */
+  border: 1px solid #2D3748;
+}
+
+/* Button Enhancements */
+.btn-primary {
+  background: linear-gradient(135deg, #20BEFF 0%, #4299E1 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px rgba(32, 190, 255, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(32, 190, 255, 0.4);
+}
+.btn-secondary {
+  background: linear-gradient(135deg, #FF6B35 0%, #ED8936 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px rgba(255, 107, 53, 0.3);
+}
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(255, 107, 53, 0.4);
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Loading States */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 20, 25, 0.8);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #2D3748;
+  border-top: 3px solid #20BEFF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Quiz Interface */
+.quiz-container {
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+  border: 1px solid #4A5568;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 16px 0;
+}
+.quiz-option {
+  background: #2D3748;
+  border: 1px solid #4A5568;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.quiz-option:hover {
+  background: #4A5568;
+  border-color: #20BEFF;
+}
+.quiz-option.selected {
+  background: rgba(32, 190, 255, 0.1);
+  border-color: #20BEFF;
+  color: #20BEFF;
+}
+.quiz-option.correct {
+  background: rgba(72, 187, 120, 0.2);
+  border-color: #48BB78;
+  color: #48BB78;
+}
+.quiz-option.incorrect {
+  background: rgba(245, 101, 101, 0.2);
+  border-color: #F56565;
+  color: #F56565;
+}
+
+/* Trading Interface Enhancements */
+.stock-card {
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+  border: 1px solid #4A5568;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
+}
+.stock-card:hover {
+  transform: translateY(-2px);
+  border-color: #20BEFF;
+  box-shadow: 0 8px 20px rgba(32, 190, 255, 0.1);
+}
+.price-positive {
+  color: #48BB78;
+  font-weight: 600;
+}
+.price-negative {
+  color: #F56565;
+  font-weight: 600;
+}
+.price-neutral {
+  color: #CBD5E0;
+  font-weight: 600;
+}
+
+/* Chat Interface */
+.chat-container {
+  background: rgba(26, 32, 44, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(74, 85, 104, 0.3);
+  border-radius: 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 120px);
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  scroll-behavior: smooth;
+  max-height: calc(100vh - 280px);
+}
+.chat-input-container {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+  border-top: 1px solid #4A5568;
+  border-radius: 0 0 12px 12px;
+}
+.chat-header {
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #4A5568;
+  border-radius: 12px 12px 0 0;
+  padding: 16px;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+  border: 1px solid #4A5568;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 16px 0; /* Increased margin to avoid collision */
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #20BEFF 0%, #48BB78 50%, #FFD700 100%);
+}
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: #20BEFF;
+}
+
+/* League Interface */
+.league-card {
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+  border: 1px solid #4A5568;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 12px 0;
+  transition: all 0.2s ease-in-out;
+}
+.league-card:hover {
+  border-color: #20BEFF;
+  box-shadow: 0 4px 12px rgba(32, 190, 255, 0.2);
+}
+.league-joined {
+  border-color: #48BB78;
+  background: rgba(72, 187, 120, 0.1);
+}
+
+/* Demo and Games */
+.game-tab {
+  background: #2D3748;
+  border-radius: 8px;
+  padding: 8px; /* Increased padding for more space */
+  margin: 16px 0; /* Added margin to separate from title and content */
+}
+.game-tab .tab-button {
+  border-radius: 6px;
+  margin: 0 4px; /* Increased margin for tab separation */
+  padding: 12px 20px; /* Increased padding for larger tabs */
+  transition: all 0.2s ease-in-out;
+  background: transparent;
+  color: #CBD5E0;
+  border: none;
+  cursor: pointer;
+}
+.game-tab .tab-button.active {
+  background: #20BEFF;
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.game-tab .tab-button:hover:not(.active) {
+  background: #4A5568;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Glassmorphism Effect */
+.glass-card {
+  background: rgba(26, 32, 44, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(74, 85, 104, 0.3);
+  border-radius: 16px;
+  padding: 32px; /* Increased padding for larger card */
+}
+
+/* Neon Glow Effects */
+.neon-blue {
+  box-shadow: 0 0 20px rgba(32, 190, 255, 0.3), 0 0 40px rgba(32, 190, 255, 0.1);
+}
+.neon-green {
+  box-shadow: 0 0 20px rgba(72, 187, 120, 0.3), 0 0 40px rgba(72, 187, 120, 0.1);
+}
+.neon-orange {
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.3), 0 0 40px rgba(255, 107, 53, 0.1);
+}
+
+/* Success/Error States */
+.success-state {
+  border-color: #48BB78;
+  background: rgba(72, 187, 120, 0.1);
+  color: #48BB78;
+}
+.error-state {
+  border-color: #F56565;
+  background: rgba(245, 101, 101, 0.1);
+  color: #F56565;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .trading-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
-  to {
-    transform: rotate(360deg);
+  .module-card {
+    padding: 16px;
   }
+  .dashboard-card {
+    padding: 16px;
+  }
+  .chat-container {
+    padding: 16px;
+  }
+  .glass-card {
+    padding: 24px; /* Slightly reduced padding for smaller screens */
+  }
+  .game-tab {
+    padding: 6px;
+  }
+  .game-tab .tab-button {
+    padding: 10px 16px;
+    margin: 0 2px;
+  }
+}
+
+/* Navigation Enhancements */
+.nav-drawer {
+  background: #1A202C;
+  border-right: 1px solid #2D3748;
+}
+.nav-item {
+  border-radius: 8px;
+  margin: 4px 8px;
+  transition: all 0.2s ease-in-out;
+}
+.nav-item:hover {
+  background: #2D3748;
+  transform: translateX(4px);
+}
+.nav-item.active {
+  background: rgba(32, 190, 255, 0.1);
+  border-left: 3px solid #20BEFF;
+  color: #20BEFF;
+}
+
+/* Typography Enhancements */
+.gradient-text {
+  background: linear-gradient(135deg, #20BEFF 0%, #FF6B35 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+.accent-text {
+  color: #20BEFF;
+  font-weight: 600;
+}
+
+/* Portfolio Value Cards */
+.portfolio-value-card {
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+  border: 1px solid #4A5568;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+.portfolio-value-positive {
+  border-color: #48BB78;
+  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.2);
+}
+.portfolio-value-negative {
+  border-color: #F56565;
+  box-shadow: 0 4px 12px rgba(245, 101, 101, 0.2);
+}
+
+/* Daily Challenge */
+.daily-challenge {
+  background: linear-gradient(135deg, #2D3748 0%, #4A5568 100%);
+  border: 1px solid #718096;
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.daily-challenge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #FFD700 0%, #FF6B35 100%);
+}
+
+/* Misc Utilities */
+.text-gradient {
+  background: linear-gradient(135deg, #20BEFF 0%, #48BB78 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.border-gradient {
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #1A202C, #2D3748) padding-box,
+              linear-gradient(135deg, #20BEFF, #48BB78) border-box;
+}
+
+/* Focus states for accessibility */
+.focus-visible {
+  outline: 2px solid #20BEFF;
+  outline-offset: 2px;
 }
