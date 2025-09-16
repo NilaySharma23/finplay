@@ -113,12 +113,11 @@ The platform addresses key pain points for retail investors:
 5. **Run the Backend**:
    ```bash
    cd backend
-   npm start
+   node index.js
    ```
 
-6. **Run the Frontend**:
+6. **Run the Frontend**: In a different terminal
    ```bash
-   cd ..
    npm start
    ```
    The app will be available at `http://localhost:3000`.
